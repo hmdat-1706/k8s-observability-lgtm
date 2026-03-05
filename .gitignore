@@ -6,3 +6,4 @@ minikube
 *.log
 .DS_Store
 node_modules/
+minikube-linux-amd64

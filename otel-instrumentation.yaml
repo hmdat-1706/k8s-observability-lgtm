@@ -1,0 +1,20 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: lgtm-instrumentation
+  namespace: bookinfo
+spec:
+  exporter:
+    endpoint: "http://tempo.lgtm-local.svc.cluster.local:4317"
+  sampler:
+    type: always_on
+  env:
+    - name: OTEL_EXPORTER_OTLP_PROTOCOL
+      value: grpc
+    # Thêm 'console' vào đây để ép nó in vết Traces ra log
+    - name: OTEL_TRACES_EXPORTER
+      value: "console,otlp" 
+    - name: OTEL_METRICS_EXPORTER
+      value: none
+    - name: OTEL_LOGS_EXPORTER
+      value: none
