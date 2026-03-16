@@ -1,0 +1,8 @@
+server:
+  remoteWrite:
+    - url: http://mimir-gateway.lgtm.svc.cluster.local:80/api/v1/push
+  retention: 2h # Chỉ giữ data tạm 2h, phần lưu trữ dài hạn để Mimir lo
+alertmanager:
+  enabled: false # Tạm tắt Alert cho nhẹ máy ảo
+prometheus-pushgateway:
+  enabled: false

@@ -1,0 +1,35 @@
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Loki
+      type: loki
+      url: http://loki.lgtm.svc.cluster.local:3100
+      access: proxy
+      isDefault: true
+    - name: Tempo
+      type: tempo
+      url: http://tempo.lgtm.svc.cluster.local:3200
+      access: proxy
+    - name: Mimir
+      type: prometheus
+      url: http://mimir-gateway.lgtm.svc.cluster.local:80/prometheus
+      access: proxy
+alerting:
+  contactpoints.yaml:
+    apiVersion: 1
+    contactPoints:
+      - orgId: 1
+        name: Telegram
+        receivers:
+          - uid: telegram_1
+            type: telegram
+            settings:
+              bottoken: "8743622146:AAFE4j-z2Op652ydfebRSxVWjlTC5BVcZsA"
+              chatid: "7765918735"
+  policies.yaml:
+    apiVersion: 1
+    policies:
+      - orgId: 1
+        receiver: Telegram
+        group_by: ['alertname']
