@@ -1,24 +1,3 @@
----
-# Vá cấu hình giới hạn CPU/RAM cho productpage
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: productpage-v1
-  namespace: bookinfo
-spec:
-  template:
-    spec:
-      containers:
-      - name: productpage
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
----
-# Cấu hình HPA tự động nhân bản Pod khi CPU > 50%
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
