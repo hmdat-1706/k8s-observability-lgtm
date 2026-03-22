@@ -10,14 +10,14 @@ spec:
     kind: Deployment
     name: productpage-v1
   minReplicas: 1
-  maxReplicas: 5
+  maxReplicas: 10
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 70
+        averageUtilization: 60 ##Scale if CPU reach 60%
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -37,7 +37,7 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 70
+        averageUtilization: 60
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -57,7 +57,7 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 70
+        averageUtilization: 60
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -77,7 +77,7 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 70
+        averageUtilization: 60
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -97,7 +97,7 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 70
+        averageUtilization: 60
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -117,4 +117,4 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 70
+        averageUtilization: 60
