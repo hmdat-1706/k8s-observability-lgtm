@@ -25,8 +25,8 @@ alerting:
           - uid: telegram_1
             type: telegram
             settings:
-  		bottoken: "${TELEGRAM_TOKEN}"
-  		chatid: "${TELEGRAM_CHAT_ID}"
+              bottoken: "${TELEGRAM_TOKEN}"
+              chatid: "${TELEGRAM_CHAT_ID}"
   policies.yaml:
     apiVersion: 1
     policies:

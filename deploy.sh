@@ -36,5 +36,7 @@ echo "Prometheus..."
 helm upgrade --install prometheus prometheus-community/prometheus -n lgtm -f monitoring/prometheus-values.yaml
 
 echo "Grafana..."
-helm upgrade --install grafana grafana/grafana -n lgtm --set service.type=NodePort --set service.nodePort=32000 -f monitoring/grafana-values.yaml
-echo "Done!"s
+source .env
+envsubst < monitoring/grafana-values.yaml > monitoring/grafana-values-applied.yaml
+helm upgrade --install grafana grafana/grafana -n lgtm --set service.type=NodePort --set service.nodePort=32000 -f monitoring/grafana-values-applied.yaml
+echo "Done!"

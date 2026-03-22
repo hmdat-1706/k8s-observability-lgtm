@@ -1,9 +1,14 @@
 mode: daemonset
+
 image:
   repository: "otel/opentelemetry-collector-contrib"
+
 presets:
   logsCollection:
     enabled: true
+service:
+  enabled: true
+
 ports:
   otlp:
     enabled: true
@@ -15,6 +20,7 @@ ports:
     containerPort: 4318
     servicePort: 4318
     protocol: TCP
+
 config:
   receivers:
     otlp:
@@ -23,6 +29,7 @@ config:
           endpoint: 0.0.0.0:4317
         http:
           endpoint: 0.0.0.0:4318
+          
   exporters:
     otlphttp/loki:
       endpoint: "http://loki.lgtm.svc.cluster.local:3100/otlp"
@@ -32,6 +39,7 @@ config:
       endpoint: "tempo.lgtm.svc.cluster.local:4317"
       tls:
         insecure: true
+        
   service:
     pipelines:
       logs:

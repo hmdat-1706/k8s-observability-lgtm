@@ -76,6 +76,13 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
 ---
 ##################################################################################################
 # Ratings service
@@ -127,6 +134,13 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
 ---
 ##################################################################################################
 # Reviews service
@@ -181,6 +195,13 @@ spec:
           value: "/tmp/logs"
         ports:
         - containerPort: 9080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
         volumeMounts:
         - name: tmp
           mountPath: /tmp
@@ -221,6 +242,13 @@ spec:
           value: "/tmp/logs"
         ports:
         - containerPort: 9080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
         volumeMounts:
         - name: tmp
           mountPath: /tmp
@@ -261,6 +289,13 @@ spec:
           value: "/tmp/logs"
         ports:
         - containerPort: 9080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
         volumeMounts:
         - name: tmp
           mountPath: /tmp
@@ -283,9 +318,11 @@ metadata:
     app: productpage
     service: productpage
 spec:
+  type: NodePort
   ports:
   - port: 9080
     name: http
+    nodePort: 30080
   selector:
     app: productpage
 ---
@@ -326,6 +363,13 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
         volumeMounts:
         - name: tmp
           mountPath: /tmp

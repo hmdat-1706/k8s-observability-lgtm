@@ -1,0 +1,8 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: bookinfo-queue-limit
+  namespace: bookinfo
+spec:
+  inFlightReq:
+    amount: 75 #Drop the 75th request

@@ -3,8 +3,8 @@ import { check, sleep } from 'k6';
 
 export const options = {
   stages: [
-    { duration: '10s', target: 50 },  // Tăng tốc lên 50 user trong 10 giây
-    { duration: '30s', target: 50 },  // Giữ mức 50 user trong 30 giây
+    { duration: '10s', target: 200 },  // Tăng tốc lên 50 user trong 10 giây
+    { duration: '30s', target: 200 },  // Giữ mức 50 user trong 30 giây
     { duration: '10s', target: 0 },   // Giảm dần về 0 user
   ],
 };

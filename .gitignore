@@ -2,8 +2,12 @@
 minikube-linux-amd64
 minikube
 
-# Chặn các file rác hệ thống và log
+# Chặn các file và log
 *.log
 .DS_Store
 node_modules/
 minikube-linux-amd64
+
+#
+.env
+*-applied.yaml
