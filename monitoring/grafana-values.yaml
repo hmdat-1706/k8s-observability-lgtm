@@ -33,3 +33,21 @@ alerting:
       - orgId: 1
         receiver: Telegram
         group_by: ['alertname']
+dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: 'Thesis-Dashboards'
+        orgId: 1
+        folder: 'Performance Test'
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+  dashboards:
+    default:
+      infra-dashboard:
+        file: ./grafana-dashboard/Infrastructure-1774167916234.json 
+      red-dashboard:
+        file: ./grafana-dashboard/RED Method-1774167944531.json
