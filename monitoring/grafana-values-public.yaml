@@ -26,8 +26,8 @@ alerting:
           - uid: telegram_1
             type: telegram
             settings:
-              bottoken: "8743622146:AAEtey4rBM9lwM0xHPbB7zjJ_FajDvwTRYc"
-              chatid: "7765918735"
+              bottoken: "{TOKEN}"
+              chatid: "{CHATID}"
   policies.yaml:
     apiVersion: 1
     policies:

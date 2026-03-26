@@ -1,38 +1,31 @@
-# Copyright Istio Authors
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-
 ##################################################################################################
-# This file defines the services, service accounts, and deployments for the Bookinfo sample.
-#
-# To apply all 4 Bookinfo services, their corresponding service accounts, and deployments:
-#
-#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
-#
-# Alternatively, you can deploy any resource separately:
-#
-#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml -l service=reviews # reviews Service
-#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml -l account=reviews # reviews ServiceAccount
-#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml -l app=reviews,version=v3 # reviews-v3 Deployment
+# NAMESPACE & INSTRUMENTATION
 ##################################################################################################
-
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bookinfo
+---
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: bookinfo-instrumentation
+  namespace: bookinfo
+spec:
+  exporter:
+    # Dùng tên miền nội bộ chuẩn của K8s, không hardcode IP nữa cho "sạch"
+    endpoint: http://otel-collector-opentelemetry-collector.lgtm.svc.cluster.local:4317
+  sampler:
+    type: always_on
+---
 ##################################################################################################
-# Details service
+# DETAILS SERVICE
 ##################################################################################################
 apiVersion: v1
 kind: Service
 metadata:
   name: details
+  namespace: bookinfo
   labels:
     app: details
     service: details
@@ -47,13 +40,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: bookinfo-details
-  labels:
-    account: details
+  namespace: bookinfo
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: details-v1
+  namespace: bookinfo
   labels:
     app: details
     version: v1
@@ -73,24 +66,20 @@ spec:
       containers:
       - name: details
         image: docker.io/istio/examples-bookinfo-details-v1:1.20.2
-        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
         resources:
-          requests:
-            cpu: "100m"
-            memory: "128Mi"
-          limits:
-            cpu: "500m"
-            memory: "256Mi"
+          requests: { cpu: "10m", memory: "64Mi" }
+          limits: { cpu: "100m", memory: "128Mi" }
 ---
 ##################################################################################################
-# Ratings service
+# RATINGS SERVICE
 ##################################################################################################
 apiVersion: v1
 kind: Service
 metadata:
   name: ratings
+  namespace: bookinfo
   labels:
     app: ratings
     service: ratings
@@ -105,13 +94,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: bookinfo-ratings
-  labels:
-    account: ratings
+  namespace: bookinfo
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ratings-v1
+  namespace: bookinfo
   labels:
     app: ratings
     version: v1
@@ -131,24 +120,20 @@ spec:
       containers:
       - name: ratings
         image: docker.io/istio/examples-bookinfo-ratings-v1:1.20.2
-        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
         resources:
-          requests:
-            cpu: "100m"
-            memory: "128Mi"
-          limits:
-            cpu: "500m"
-            memory: "256Mi"
+          requests: { cpu: "10m", memory: "64Mi" }
+          limits: { cpu: "100m", memory: "128Mi" }
 ---
 ##################################################################################################
-# Reviews service
+# REVIEWS SERVICES
 ##################################################################################################
 apiVersion: v1
 kind: Service
 metadata:
   name: reviews
+  namespace: bookinfo
   labels:
     app: reviews
     service: reviews
@@ -163,13 +148,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: bookinfo-reviews
-  labels:
-    account: reviews
+  namespace: bookinfo
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: reviews-v1
+  namespace: bookinfo
   labels:
     app: reviews
     version: v1
@@ -184,39 +169,25 @@ spec:
       labels:
         app: reviews
         version: v1
+      annotations:
+        instrumentation.opentelemetry.io/inject-java: "bookinfo-instrumentation"
+        instrumentation.opentelemetry.io/container-names: "reviews"
     spec:
       serviceAccountName: bookinfo-reviews
       containers:
       - name: reviews
         image: docker.io/istio/examples-bookinfo-reviews-v1:1.20.2
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: LOG_DIR
-          value: "/tmp/logs"
         ports:
         - containerPort: 9080
         resources:
-          requests:
-            cpu: "100m"
-            memory: "128Mi"
-          limits:
-            cpu: "500m"
-            memory: "256Mi"
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-        - name: wlp-output
-          mountPath: /opt/ibm/wlp/output
-      volumes:
-      - name: wlp-output
-        emptyDir: {}
-      - name: tmp
-        emptyDir: {}
+          requests: { cpu: "50m", memory: "128Mi" }
+          limits: { cpu: "300m", memory: "300Mi" }
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: reviews-v2
+  namespace: bookinfo
   labels:
     app: reviews
     version: v2
@@ -231,39 +202,25 @@ spec:
       labels:
         app: reviews
         version: v2
+      annotations:
+        instrumentation.opentelemetry.io/inject-java: "bookinfo-instrumentation"
+        instrumentation.opentelemetry.io/container-names: "reviews"
     spec:
       serviceAccountName: bookinfo-reviews
       containers:
       - name: reviews
         image: docker.io/istio/examples-bookinfo-reviews-v2:1.20.2
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: LOG_DIR
-          value: "/tmp/logs"
         ports:
         - containerPort: 9080
         resources:
-          requests:
-            cpu: "100m"
-            memory: "128Mi"
-          limits:
-            cpu: "500m"
-            memory: "256Mi"
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-        - name: wlp-output
-          mountPath: /opt/ibm/wlp/output
-      volumes:
-      - name: wlp-output
-        emptyDir: {}
-      - name: tmp
-        emptyDir: {}
+          requests: { cpu: "50m", memory: "128Mi" }
+          limits: { cpu: "300m", memory: "300Mi" }
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: reviews-v3
+  namespace: bookinfo
   labels:
     app: reviews
     version: v3
@@ -278,42 +235,28 @@ spec:
       labels:
         app: reviews
         version: v3
+      annotations:
+        instrumentation.opentelemetry.io/inject-java: "bookinfo-instrumentation"
+        instrumentation.opentelemetry.io/container-names: "reviews"
     spec:
       serviceAccountName: bookinfo-reviews
       containers:
       - name: reviews
         image: docker.io/istio/examples-bookinfo-reviews-v3:1.20.2
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: LOG_DIR
-          value: "/tmp/logs"
         ports:
         - containerPort: 9080
         resources:
-          requests:
-            cpu: "100m"
-            memory: "128Mi"
-          limits:
-            cpu: "500m"
-            memory: "256Mi"
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-        - name: wlp-output
-          mountPath: /opt/ibm/wlp/output
-      volumes:
-      - name: wlp-output
-        emptyDir: {}
-      - name: tmp
-        emptyDir: {}
+          requests: { cpu: "50m", memory: "128Mi" }
+          limits: { cpu: "300m", memory: "300Mi" }
 ---
 ##################################################################################################
-# Productpage services
+# PRODUCTPAGE SERVICE (PYTHON)
 ##################################################################################################
 apiVersion: v1
 kind: Service
 metadata:
   name: productpage
+  namespace: bookinfo
   labels:
     app: productpage
     service: productpage
@@ -330,13 +273,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: bookinfo-productpage
-  labels:
-    account: productpage
+  namespace: bookinfo
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: productpage-v1
+  namespace: bookinfo
   labels:
     app: productpage
     version: v1
@@ -348,32 +291,22 @@ spec:
       version: v1
   template:
     metadata:
+      labels:
+        app: productpage
+        version: v1
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9080"
         prometheus.io/path: "/metrics"
-      labels:
-        app: productpage
-        version: v1
+        instrumentation.opentelemetry.io/inject-python: "bookinfo-instrumentation"
+        instrumentation.opentelemetry.io/container-names: "productpage"
     spec:
       serviceAccountName: bookinfo-productpage
       containers:
       - name: productpage
         image: docker.io/istio/examples-bookinfo-productpage-v1:1.20.2
-        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
         resources:
-          requests:
-            cpu: "100m"
-            memory: "128Mi"
-          limits:
-            cpu: "500m"
-            memory: "256Mi"
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-      volumes:
-      - name: tmp
-        emptyDir: {}
----
+          requests: { cpu: "50m", memory: "128Mi" }
+          limits: { cpu: "200m", memory: "256Mi" }
