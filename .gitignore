@@ -1,12 +1,7 @@
-# Chặn file thực thi Minikube
-minikube-linux-amd64
-minikube
-
-# Chặn các file và log
+#
 *.log
 .DS_Store
 node_modules/
-minikube-linux-amd64
 
 #
 .env

@@ -18,6 +18,14 @@ mimir:
     store_gateway:
       sharding_ring:
         replication_factor: 1
+    blocks_storage:
+      backend: s3
+      s3:
+        bucket_name: lgtm-netperform-somt-2026
+        endpoint: s3.ap-southeast-1.amazonaws.com
+        region: ap-southeast-1
+        insecure: false
+    multitenancy_enabled: false
 
 distributor:
   replicas: 1
@@ -58,7 +66,7 @@ store_gateway:
     limits: { cpu: 100m, memory: 128Mi }
 
 minio:
-  enabled: true
+  enabled: false
   mode: standalone
   replicas: 1
   resources:
