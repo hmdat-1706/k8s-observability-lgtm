@@ -213,8 +213,8 @@ spec:
         ports:
         - containerPort: 9080
         resources:
-          requests: { cpu: "50m", memory: "128Mi" }
-          limits: { cpu: "300m", memory: "300Mi" }
+          requests: { cpu: "100m", memory: "128Mi" }
+          limits: { cpu: "500m", memory: "512Mi" }
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -246,8 +246,8 @@ spec:
         ports:
         - containerPort: 9080
         resources:
-          requests: { cpu: "50m", memory: "128Mi" }
-          limits: { cpu: "300m", memory: "300Mi" }
+          requests: { cpu: "100m", memory: "128Mi" }
+          limits: { cpu: "500m", memory: "512Mi" }
 ---
 ##################################################################################################
 # PRODUCTPAGE SERVICE (PYTHON)
