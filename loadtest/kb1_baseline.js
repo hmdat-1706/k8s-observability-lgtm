@@ -1,11 +1,11 @@
 import http from 'k6/http';
 import { sleep, check } from 'k6';
 
-const TARGET_URL = 'http://localhost/productpage';
+const TARGET_URL = 'http://54.179.226.99/productpage';
 
 export const options = {
-  vus: 5,           //10 Users
-  duration: '3m',   //Idle for 3 mins
+  vus: 10,           //10 Users
+  duration: '2m',   //Idle for 3 mins
 };
 
 export default function () {
