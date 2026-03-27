@@ -4,7 +4,7 @@ import { sleep, check } from 'k6';
 const TARGET_URL = 'http://localhost/productpage';
 
 export const options = {
-  vus: 10,           //10 Users
+  vus: 5,           //10 Users
   duration: '3m',   //Idle for 3 mins
 };
 
