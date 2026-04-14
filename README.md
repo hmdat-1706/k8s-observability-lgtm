@@ -46,12 +46,14 @@ git clone [https://github.com/hmdat-1706/k8s-observability-lgtm.git](https://git
 cd k8s-observability-lgtm
 ```
 
-2. Deploy the LGTM Stack:
+2. Deploy the Stack using Script:
+I provide an automated shell script to streamline the deployment of the LGTM stack, and configurations.
 ```Bash
-kubectl apply -k manifests/lgtm-stack/
-kubectl apply -k manifests/monitoring/
+# Make the script executable
+chmod +x deploy.sh
+# Run the deployment script
+./deploy.sh
 ```
-
 3. Verify Pod Status:
 ```Bash
 kubectl get pods -n observability
